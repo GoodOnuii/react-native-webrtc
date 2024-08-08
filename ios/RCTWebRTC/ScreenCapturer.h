@@ -6,11 +6,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SocketConnection;
 
-@interface ScreenCapturer : LKRTCVideoCapturer
+@interface ScreenCapturer : RTCVideoCapturer
 
 @property(nonatomic, weak) id<CapturerEventsDelegate> eventsDelegate;
 
-- (instancetype)initWithDelegate:(__weak id<LKRTCVideoCapturerDelegate>)delegate;
+- (instancetype)initWithDelegate:(__weak id<RTCVideoCapturerDelegate>)delegate;
 - (void)startCaptureWithConnection:(nonnull SocketConnection *)connection;
 - (void)stopCapture;
 

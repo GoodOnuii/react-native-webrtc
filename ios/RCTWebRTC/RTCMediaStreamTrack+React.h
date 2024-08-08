@@ -3,7 +3,7 @@
 
 @class CaptureController;
 
-@interface LKRTCMediaStreamTrack (React)
+@interface RTCMediaStreamTrack (React)
 
 @property(strong, nonatomic) CaptureController *captureController;
 

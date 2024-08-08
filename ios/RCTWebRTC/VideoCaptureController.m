@@ -6,7 +6,7 @@
 
 @interface VideoCaptureController ()
 
-@property(nonatomic, strong) LKRTCCameraVideoCapturer *capturer;
+@property(nonatomic, strong) RTCCameraVideoCapturer *capturer;
 @property(nonatomic, strong) AVCaptureDeviceFormat *selectedFormat;
 @property(nonatomic, strong) AVCaptureDevice *device;
 @property(nonatomic, copy) NSString *deviceId;
@@ -20,7 +20,7 @@
 
 @implementation VideoCaptureController
 
-- (instancetype)initWithCapturer:(LKRTCCameraVideoCapturer *)capturer andConstraints:(NSDictionary *)constraints {
+- (instancetype)initWithCapturer:(RTCCameraVideoCapturer *)capturer andConstraints:(NSDictionary *)constraints {
     self = [super init];
     if (self) {
         self.capturer = capturer;
@@ -188,7 +188,7 @@
 }
 
 - (AVCaptureDevice *)findDeviceForPosition:(AVCaptureDevicePosition)position {
-    NSArray<AVCaptureDevice *> *captureDevices = [LKRTCCameraVideoCapturer captureDevices];
+    NSArray<AVCaptureDevice *> *captureDevices = [RTCCameraVideoCapturer captureDevices];
     for (AVCaptureDevice *device in captureDevices) {
         if (device.position == position) {
             return device;
@@ -201,7 +201,7 @@
 - (AVCaptureDeviceFormat *)selectFormatForDevice:(AVCaptureDevice *)device
                                  withTargetWidth:(int)targetWidth
                                 withTargetHeight:(int)targetHeight {
-    NSArray<AVCaptureDeviceFormat *> *formats = [LKRTCCameraVideoCapturer supportedFormatsForDevice:device];
+    NSArray<AVCaptureDeviceFormat *> *formats = [RTCCameraVideoCapturer supportedFormatsForDevice:device];
     AVCaptureDeviceFormat *selectedFormat = nil;
     int currentDiff = INT_MAX;
 

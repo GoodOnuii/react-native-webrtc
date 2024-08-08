@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (void)capturerDidEnd:(LKRTCVideoCapturer *)capturer {
+- (void)capturerDidEnd:(RTCVideoCapturer *)capturer {
     [self.module sendEventWithName:kEventMediaStreamTrackEnded
                               body:@{
                                   @"trackId" : self.trackId,

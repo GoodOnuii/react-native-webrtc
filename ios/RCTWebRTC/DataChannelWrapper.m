@@ -3,12 +3,12 @@
 
 #import <LiveKitWebRTC/RTCDataChannel.h>
 
-@interface DataChannelWrapper ()<LKRTCDataChannelDelegate>
+@interface DataChannelWrapper ()<RTCDataChannelDelegate>
 @end
 
 @implementation DataChannelWrapper
 
-- (instancetype)initWithChannel:(LKRTCDataChannel *)channel reactTag:(NSString *)tag {
+- (instancetype)initWithChannel:(RTCDataChannel *)channel reactTag:(NSString *)tag {
     self = [super init];
     if (self) {
         _channel = channel;
@@ -21,19 +21,19 @@
     return self;
 }
 
-- (void)dataChannel:(nonnull LKRTCDataChannel *)dataChannel didReceiveMessageWithBuffer:(nonnull LKRTCDataBuffer *)buffer {
+- (void)dataChannel:(nonnull RTCDataChannel *)dataChannel didReceiveMessageWithBuffer:(nonnull RTCDataBuffer *)buffer {
     if (_delegate) {
         [_delegate dataChannel:self didReceiveMessageWithBuffer:buffer];
     }
 }
 
-- (void)dataChannelDidChangeState:(nonnull LKRTCDataChannel *)dataChannel {
+- (void)dataChannelDidChangeState:(nonnull RTCDataChannel *)dataChannel {
     if (_delegate) {
         [_delegate dataChannelDidChangeState:self];
     }
 }
 
-- (void)dataChannel:(nonnull LKRTCDataChannel *)dataChannel didChangeBufferedAmount:(uint64_t)amount {
+- (void)dataChannel:(nonnull RTCDataChannel *)dataChannel didChangeBufferedAmount:(uint64_t)amount {
     if (_delegate) {
         [_delegate dataChannel:self didChangeBufferedAmount:amount];
     }

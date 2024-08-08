@@ -136,7 +136,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
     int64_t _startTimeStampNs;
 }
 
-- (instancetype)initWithDelegate:(__weak id<LKRTCVideoCapturerDelegate>)delegate {
+- (instancetype)initWithDelegate:(__weak id<RTCVideoCapturerDelegate>)delegate {
     self = [super initWithDelegate:delegate];
     if (self) {
         mach_timebase_info(&_timebaseInfo);
@@ -207,7 +207,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
         _startTimeStampNs = currentTimeStampNs;
     }
 
-    LKRTCCVPixelBuffer *rtcPixelBuffer = [[LKRTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
+    RTCCVPixelBuffer *rtcPixelBuffer = [[RTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
     int64_t frameTimeStampNs = currentTimeStampNs - _startTimeStampNs;
 
     RTCVideoRotation rotation;
@@ -226,7 +226,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
             break;
     }
 
-    LKRTCVideoFrame *videoFrame = [[LKRTCVideoFrame alloc] initWithBuffer:rtcPixelBuffer
+    RTCVideoFrame *videoFrame = [[RTCVideoFrame alloc] initWithBuffer:rtcPixelBuffer
                                                              rotation:rotation
                                                           timeStampNs:frameTimeStampNs];
 

@@ -3,7 +3,7 @@
 #import "CaptureController.h"
 #import "RTCMediaStreamTrack+React.h"
 
-@implementation LKRTCMediaStreamTrack (React)
+@implementation RTCMediaStreamTrack (React)
 
 - (CaptureController *)captureController {
     return objc_getAssociatedObject(self, @selector(captureController));

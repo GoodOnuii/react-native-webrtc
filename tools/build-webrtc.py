@@ -38,7 +38,7 @@ def build_gn_args(platform_args):
     return "--args='" + ' '.join(GN_COMMON_ARGS + platform_args) + "'"
 
 GN_COMMON_ARGS = [
-    'rtc_objc_prefix="LK"'
+    # 'rtc_objc_prefix="LK"'
     'rtc_libvpx_build_vp9=true',
     'rtc_enable_protobuf=false',
     'rtc_include_tests=false',

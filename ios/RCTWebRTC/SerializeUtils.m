@@ -2,7 +2,7 @@
 
 @implementation SerializeUtils
 + (NSDictionary *)transceiverToJSONWithPeerConnectionId:(NSNumber *)id
-                                            transceiver:(LKRTCRtpTransceiver *_Nonnull)transceiver {
+                                            transceiver:(RTCRtpTransceiver *_Nonnull)transceiver {
     NSMutableDictionary *result = [NSMutableDictionary new];
 
     result[@"id"] = transceiver.sender.senderId;
@@ -22,10 +22,10 @@
     return result;
 }
 
-+ (NSMutableArray *)constructTransceiversInfoArrayWithPeerConnection:(LKRTCPeerConnection *)peerConnection {
++ (NSMutableArray *)constructTransceiversInfoArrayWithPeerConnection:(RTCPeerConnection *)peerConnection {
     NSMutableArray *transceiverUpdates = [NSMutableArray new];
 
-    for (LKRTCRtpTransceiver *transceiver in peerConnection.transceivers) {
+    for (RTCRtpTransceiver *transceiver in peerConnection.transceivers) {
         NSMutableDictionary *transceiverUpdate = [NSMutableDictionary new];
 
         RTCRtpTransceiverDirection currentDirection;
@@ -47,7 +47,7 @@
     return transceiverUpdates;
 }
 
-+ (NSDictionary *)senderToJSONWithPeerConnectionId:(NSNumber *)id sender:(LKRTCRtpSender *)sender {
++ (NSDictionary *)senderToJSONWithPeerConnectionId:(NSNumber *)id sender:(RTCRtpSender *)sender {
     NSMutableDictionary *senderDictionary = [NSMutableDictionary new];
     senderDictionary[@"id"] = sender.senderId;
     senderDictionary[@"peerConnectionId"] = id;
@@ -61,7 +61,7 @@
     return senderDictionary;
 }
 
-+ (NSDictionary *)receiverToJSONWithPeerConnectionId:(NSNumber *)id receiver:(LKRTCRtpReceiver *)receiver {
++ (NSDictionary *)receiverToJSONWithPeerConnectionId:(NSNumber *)id receiver:(RTCRtpReceiver *)receiver {
     NSMutableDictionary *receiverDictionary = [NSMutableDictionary new];
     receiverDictionary[@"id"] = receiver.receiverId;
     receiverDictionary[@"peerConnectionId"] = id;
@@ -75,7 +75,7 @@
     return receiverDictionary;
 }
 
-+ (NSDictionary *)parametersToJSON:(LKRTCRtpParameters *)params {
++ (NSDictionary *)parametersToJSON:(RTCRtpParameters *)params {
     NSMutableDictionary *paramsDictionary = [NSMutableDictionary new];
 
     NSMutableDictionary *rtcpDictionary = [NSMutableDictionary new];
@@ -84,7 +84,7 @@
 
     NSMutableArray *headerExtensions = [NSMutableArray new];
 
-    for (LKRTCRtpHeaderExtension *extension in params.headerExtensions) {
+    for (RTCRtpHeaderExtension *extension in params.headerExtensions) {
         NSMutableDictionary *extensionDictionary = [NSMutableDictionary new];
         extensionDictionary[@"id"] = [NSNumber numberWithInt:extension.id];
         extensionDictionary[@"uri"] = extension.uri;
@@ -95,7 +95,7 @@
 
     NSMutableArray *encodings = [NSMutableArray new];
 
-    for (LKRTCRtpEncodingParameters *encoding in params.encodings) {
+    for (RTCRtpEncodingParameters *encoding in params.encodings) {
         NSMutableDictionary *encodingDictionary = [NSMutableDictionary new];
 
         encodingDictionary[@"active"] = [NSNumber numberWithBool:encoding.isActive];
@@ -118,7 +118,7 @@
 
     NSMutableArray *codecs = [NSMutableArray new];
 
-    for (LKRTCRtpCodecParameters *codec in params.codecs) {
+    for (RTCRtpCodecParameters *codec in params.codecs) {
         NSMutableDictionary *codecDictionary = [NSMutableDictionary new];
 
         codecDictionary[@"payloadType"] = [NSNumber numberWithInt:codec.payloadType];
@@ -149,7 +149,7 @@
     return paramsDictionary;
 }
 
-+ (NSDictionary *)trackToJSONWithPeerConnectionId:(NSNumber *)id track:(LKRTCMediaStreamTrack *)track {
++ (NSDictionary *)trackToJSONWithPeerConnectionId:(NSNumber *)id track:(RTCMediaStreamTrack *)track {
     NSString *readyState;
     switch (track.readyState) {
         case RTCMediaStreamTrackStateLive:
@@ -170,17 +170,17 @@
     };
 }
 
-+ (NSDictionary *)capabilitiesToJSON:(LKRTCRtpCapabilities *)capabilities {
++ (NSDictionary *)capabilitiesToJSON:(RTCRtpCapabilities *)capabilities {
     NSMutableArray *codecs = [NSMutableArray new];
 
-    for (LKRTCRtpCodecCapability *codec in capabilities.codecs) {
+    for (RTCRtpCodecCapability *codec in capabilities.codecs) {
         [codecs addObject:[self codecCapabilityToJSON:codec]];
     }
 
     return @{@"codecs" : codecs};
 }
 
-+ (NSDictionary *)codecCapabilityToJSON:(LKRTCRtpCodecCapability *)codec {
++ (NSDictionary *)codecCapabilityToJSON:(RTCRtpCodecCapability *)codec {
     NSMutableDictionary *codecDictionary = [NSMutableDictionary new];
 
     codecDictionary[@"payloadType"] = codec.preferredPayloadType;
@@ -242,8 +242,8 @@
     return RTCRtpTransceiverDirectionInactive;
 }
 
-+ (LKRTCRtpEncodingParameters *)parseEncoding:(NSDictionary *)params {
-    LKRTCRtpEncodingParameters *encoding = [LKRTCRtpEncodingParameters new];
++ (RTCRtpEncodingParameters *)parseEncoding:(NSDictionary *)params {
+    RTCRtpEncodingParameters *encoding = [RTCRtpEncodingParameters new];
 
     if (params[@"rid"] != nil) {
         [encoding setRid:params[@"rid"]];
@@ -264,8 +264,8 @@
     return encoding;
 }
 
-+ (LKRTCRtpTransceiverInit *)parseTransceiverOptions:(NSDictionary *)params {
-    LKRTCRtpTransceiverInit *transceiverInit = [LKRTCRtpTransceiverInit new];
++ (RTCRtpTransceiverInit *)parseTransceiverOptions:(NSDictionary *)params {
+    RTCRtpTransceiverInit *transceiverInit = [RTCRtpTransceiverInit new];
 
     NSString *direction = [params objectForKey:@"direction"];
     if (direction) {
@@ -279,7 +279,7 @@
 
     NSArray *encodingsArray = [params objectForKey:@"sendEncodings"];
     if (encodingsArray) {
-        NSMutableArray<LKRTCRtpEncodingParameters *> *sendEncodings = [NSMutableArray new];
+        NSMutableArray<RTCRtpEncodingParameters *> *sendEncodings = [NSMutableArray new];
         for (NSDictionary *encoding in encodingsArray) {
             [sendEncodings addObject:[self parseEncoding:encoding]];
         }
@@ -290,7 +290,7 @@
 }
 
 + (NSDictionary *)streamToJSONWithPeerConnectionId:(NSNumber *)id
-                                            stream:(LKRTCMediaStream *)stream
+                                            stream:(RTCMediaStream *)stream
                                     streamReactTag:(NSString *)streamReactTag {
     NSMutableDictionary *streamDictionary = [NSMutableDictionary new];
 
@@ -299,11 +299,11 @@
 
     NSMutableArray *tracks = [NSMutableArray new];
 
-    for (LKRTCAudioTrack *audioTrack in stream.audioTracks) {
+    for (RTCAudioTrack *audioTrack in stream.audioTracks) {
         [tracks addObject:[SerializeUtils trackToJSONWithPeerConnectionId:id track:audioTrack]];
     }
 
-    for (LKRTCVideoTrack *videoTrack in stream.videoTracks) {
+    for (RTCVideoTrack *videoTrack in stream.videoTracks) {
         [tracks addObject:[SerializeUtils trackToJSONWithPeerConnectionId:id track:videoTrack]];
     }
 

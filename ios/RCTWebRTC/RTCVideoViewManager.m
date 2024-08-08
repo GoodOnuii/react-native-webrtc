@@ -23,31 +23,31 @@
  * and https://www.w3.org/TR/html5/rendering.html#video-object-fit, resembles
  * the CSS style {@code object-fit}.
  */
-typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
+typedef NS_ENUM(NSInteger, RTCVideoViewObjectFit) {
     /**
      * The contain value defined by https://www.w3.org/TR/css3-images/#object-fit:
      *
      * The replaced content is sized to maintain its aspect ratio while fitting
      * within the element's content box.
      */
-    LKRTCVideoViewObjectFitContain = 1,
+    RTCVideoViewObjectFitContain = 1,
     /**
      * The cover value defined by https://www.w3.org/TR/css3-images/#object-fit:
      *
      * The replaced content is sized to maintain its aspect ratio while filling
      * the element's entire content box.
      */
-    LKRTCVideoViewObjectFitCover
+    RTCVideoViewObjectFitCover
 };
 
 /**
  * Implements an equivalent of {@code HTMLVideoElement} i.e. Web's video
  * element.
  */
-@interface LKRTCVideoView : RCTView
+@interface RTCVideoView : RCTView
 
 /**
- * The indicator which determines whether this {@code LKRTCVideoView} is to mirror
+ * The indicator which determines whether this {@code RTCVideoView} is to mirror
  * the video specified by {@link #videoTrack} during its rendering. Typically,
  * applications choose to mirror the front/user-facing camera.
  */
@@ -59,21 +59,21 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
  * and https://www.w3.org/TR/html5/rendering.html#video-object-fit, resembles
  * the CSS style {@code object-fit}.
  */
-@property(nonatomic) LKRTCVideoViewObjectFit objectFit;
+@property(nonatomic) RTCVideoViewObjectFit objectFit;
 
 /**
  * The {@link RRTCVideoRenderer} which implements the actual rendering.
  */
 #if TARGET_OS_OSX
-@property(nonatomic, readonly) LKRTCMTLNSVideoView *videoView;
+@property(nonatomic, readonly) RTCMTLNSVideoView *videoView;
 #else
-@property(nonatomic, readonly) LKRTCMTLVideoView *videoView;
+@property(nonatomic, readonly) RTCMTLVideoView *videoView;
 #endif
 
 /**
- * The {@link LKRTCVideoTrack}, if any, which this instance renders.
+ * The {@link RTCVideoTrack}, if any, which this instance renders.
  */
-@property(nonatomic, strong) LKRTCVideoTrack *videoTrack;
+@property(nonatomic, strong) RTCVideoTrack *videoTrack;
 
 /**
  * Reference to the main WebRTC RN module.
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
 @end
 
-@implementation LKRTCVideoView
+@implementation RTCVideoView
 
 @synthesize videoView = _videoView;
 
@@ -90,13 +90,13 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
  * Tells this view that its window object changed.
  */
 - (void)didMoveToWindow {
-    // This LKRTCVideoView strongly retains its videoTrack. The latter strongly
-    // retains the former as well though because LKRTCVideoTrack strongly retains
-    // the LKRTCVideoRenderers added to it. In other words, there is a cycle of
+    // This RTCVideoView strongly retains its videoTrack. The latter strongly
+    // retains the former as well though because RTCVideoTrack strongly retains
+    // the RTCVideoRenderers added to it. In other words, there is a cycle of
     // strong retainments. In order to break the cycle, and avoid a leak,
-    // have this LKRTCVideoView as the LKRTCVideoRenderer of its
+    // have this RTCVideoView as the RTCVideoRenderer of its
     // videoTrack only while this view resides in a window.
-    LKRTCVideoTrack *videoTrack = self.videoTrack;
+    RTCVideoTrack *videoTrack = self.videoTrack;
 
     if (videoTrack) {
         if (self.window) {
@@ -120,11 +120,11 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
 #if TARGET_OS_OSX
-        LKRTCMTLNSVideoView *subview = [[LKRTCMTLNSVideoView alloc] initWithFrame:CGRectZero];
+        RTCMTLNSVideoView *subview = [[RTCMTLNSVideoView alloc] initWithFrame:CGRectZero];
         subview.wantsLayer = true;
         _videoView = subview;
 #else
-        LKRTCMTLVideoView *subview = [[LKRTCMTLVideoView alloc] initWithFrame:CGRectZero];
+        RTCMTLVideoView *subview = [[RTCMTLVideoView alloc] initWithFrame:CGRectZero];
         _videoView = subview;
 #endif
         [self addSubview:self.videoView];
@@ -147,10 +147,10 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
 /**
  * Implements the setter of the {@link #mirror} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  *
  * @param mirror The value to set on the {@code mirror} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  */
 - (void)setMirror:(BOOL)mirror {
     if (_mirror != mirror) {
@@ -162,17 +162,17 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
 /**
  * Implements the setter of the {@link #objectFit} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  *
  * @param objectFit The value to set on the {@code objectFit} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  */
-- (void)setObjectFit:(LKRTCVideoViewObjectFit)fit {
+- (void)setObjectFit:(RTCVideoViewObjectFit)fit {
     if (_objectFit != fit) {
         _objectFit = fit;
 
 #if !TARGET_OS_OSX
-        if (fit == LKRTCVideoViewObjectFitCover) {
+        if (fit == RTCVideoViewObjectFitCover) {
             self.videoView.videoContentMode = UIViewContentModeScaleAspectFill;
         } else {
             self.videoView.videoContentMode = UIViewContentModeScaleAspectFit;
@@ -183,13 +183,13 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
 /**
  * Implements the setter of the {@link #videoTrack} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  *
  * @param videoTrack The value to set on the {@code videoTrack} property of this
- * {@code LKRTCVideoView}.
+ * {@code RTCVideoView}.
  */
-- (void)setVideoTrack:(LKRTCVideoTrack *)videoTrack {
-    LKRTCVideoTrack *oldValue = self.videoTrack;
+- (void)setVideoTrack:(RTCVideoTrack *)videoTrack {
+    RTCVideoTrack *oldValue = self.videoTrack;
 
     if (oldValue != videoTrack) {
         if (oldValue) {
@@ -224,8 +224,8 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
             CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
             int64_t time = (int64_t)(CFAbsoluteTimeGetCurrent() * 1000000000);
-            LKRTCCVPixelBuffer *buffer = [[LKRTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
-            LKRTCVideoFrame *frame = [[[LKRTCVideoFrame alloc] initWithBuffer:buffer
+            RTCCVPixelBuffer *buffer = [[RTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
+            RTCVideoFrame *frame = [[[RTCVideoFrame alloc] initWithBuffer:buffer
                                                                  rotation:RTCVideoRotation_0
                                                               timeStampNs:time] newI420VideoFrame];
 
@@ -245,12 +245,12 @@ typedef NS_ENUM(NSInteger, LKRTCVideoViewObjectFit) {
 
 @end
 
-@implementation LKRTCVideoViewManager
+@implementation RTCVideoViewManager
 
 RCT_EXPORT_MODULE()
 
 - (RCTView *)view {
-    LKRTCVideoView *v = [[LKRTCVideoView alloc] init];
+    RTCVideoView *v = [[RTCVideoView alloc] init];
     v.module = [self.bridge moduleForName:@"WebRTCModule"];
     v.clipsToBounds = YES;
     return v;
@@ -270,15 +270,15 @@ RCT_EXPORT_VIEW_PROPERTY(mirror, BOOL)
  * and https://www.w3.org/TR/html5/rendering.html#video-object-fit, resembles
  * the CSS style {@code object-fit}.
  */
-RCT_CUSTOM_VIEW_PROPERTY(objectFit, NSString *, LKRTCVideoView) {
+RCT_CUSTOM_VIEW_PROPERTY(objectFit, NSString *, RTCVideoView) {
     NSString *fitStr = json;
-    LKRTCVideoViewObjectFit fit =
-        (fitStr && [fitStr isEqualToString:@"cover"]) ? LKRTCVideoViewObjectFitCover : LKRTCVideoViewObjectFitContain;
+    RTCVideoViewObjectFit fit =
+        (fitStr && [fitStr isEqualToString:@"cover"]) ? RTCVideoViewObjectFitCover : RTCVideoViewObjectFitContain;
 
     view.objectFit = fit;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(streamURL, NSString *, LKRTCVideoView) {
+RCT_CUSTOM_VIEW_PROPERTY(streamURL, NSString *, RTCVideoView) {
     if (!json) {
         view.videoTrack = nil;
         return;
@@ -288,9 +288,9 @@ RCT_CUSTOM_VIEW_PROPERTY(streamURL, NSString *, LKRTCVideoView) {
     WebRTCModule *module = view.module;
 
     dispatch_async(module.workerQueue, ^{
-        LKRTCMediaStream *stream = [module streamForReactTag:streamReactTag];
+        RTCMediaStream *stream = [module streamForReactTag:streamReactTag];
         NSArray *videoTracks = stream ? stream.videoTracks : @[];
-        LKRTCVideoTrack *videoTrack = [videoTracks firstObject];
+        RTCVideoTrack *videoTrack = [videoTracks firstObject];
         if (!videoTrack) {
             RCTLogWarn(@"No video stream for react tag: %@", streamReactTag);
         } else {
