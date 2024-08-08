@@ -6,9 +6,9 @@ Pod::Spec.new do |s|
   s.name                = 'livekit-react-native-webrtc'
   s.version             = package['version']
   s.summary             = package['description']
-  s.homepage            = 'https://github.com/livekit/react-native-webrtc'
+  s.homepage            = 'https://github.com/GoodOnuii/react-native-webrtc'
   s.license             = package['license']
-  s.author              = 'https://github.com/livekit/react-native-webrtc/graphs/contributors'
+  s.author              = 'https://github.com/GoodOnuii/react-native-webrtc/graphs/contributors'
   s.source              = { :git => 'git@github.com:livekit/react-native-webrtc.git', :tag => 'release #{s.version}' }
   s.requires_arc        = true
 
@@ -19,5 +19,5 @@ Pod::Spec.new do |s|
   s.libraries           = 'c', 'sqlite3', 'stdc++'
   s.framework           = 'AudioToolbox','AVFoundation', 'CoreAudio', 'CoreGraphics', 'CoreVideo', 'GLKit', 'VideoToolbox'
   s.dependency          'React-Core'
-  s.dependency          'WebRTC-SDK', '~>125.6422.04'
+  s.dependency          'LiveKitWebRTC', '~>125.6422.04'
 end

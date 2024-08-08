@@ -1,12 +1,12 @@
 #import <React/RCTLog.h>
-#import <WebRTC/RTCDataChannelConfiguration.h>
-#import <WebRTC/RTCIceServer.h>
-#import <WebRTC/RTCSessionDescription.h>
+#import <LiveKitWebRTC/RTCDataChannelConfiguration.h>
+#import <LiveKitWebRTC/RTCIceServer.h>
+#import <LiveKitWebRTC/RTCSessionDescription.h>
 #import "RCTConvert+WebRTC.h"
 
 @implementation RCTConvert (WebRTC)
 
-+ (RTCSessionDescription *)RTCSessionDescription:(id)json {
++ (LKRTCSessionDescription *)RTCSessionDescription:(id)json {
     if (!json) {
         return nil;
     }
@@ -22,12 +22,12 @@
     }
 
     NSString *sdp = json[@"sdp"];
-    RTCSdpType sdpType = [RTCSessionDescription typeForString:json[@"type"]];
+    RTCSdpType sdpType = [LKRTCSessionDescription typeForString:json[@"type"]];
 
-    return [[RTCSessionDescription alloc] initWithType:sdpType sdp:sdp];
+    return [[LKRTCSessionDescription alloc] initWithType:sdpType sdp:sdp];
 }
 
-+ (RTCIceCandidate *)RTCIceCandidate:(id)json {
++ (LKRTCIceCandidate *)RTCIceCandidate:(id)json {
     if (!json) {
         RCTLogConvertError(json, @"must not be null");
         return nil;
@@ -53,10 +53,10 @@
     int sdpMLineIndex = [RCTConvert int:json[@"sdpMLineIndex"]];
     NSString *sdpMid = json[@"sdpMid"];
 
-    return [[RTCIceCandidate alloc] initWithSdp:sdp sdpMLineIndex:sdpMLineIndex sdpMid:sdpMid];
+    return [[LKRTCIceCandidate alloc] initWithSdp:sdp sdpMLineIndex:sdpMLineIndex sdpMid:sdpMid];
 }
 
-+ (RTCIceServer *)RTCIceServer:(id)json {
++ (LKRTCIceServer *)RTCIceServer:(id)json {
     if (!json) {
         RCTLogConvertError(json, @"a valid iceServer value");
         return nil;
@@ -75,21 +75,21 @@
     }
 
     if (json[@"username"] != nil || json[@"credential"] != nil) {
-        return [[RTCIceServer alloc] initWithURLStrings:urls username:json[@"username"] credential:json[@"credential"]];
+        return [[LKRTCIceServer alloc] initWithURLStrings:urls username:json[@"username"] credential:json[@"credential"]];
     }
 
-    return [[RTCIceServer alloc] initWithURLStrings:urls];
+    return [[LKRTCIceServer alloc] initWithURLStrings:urls];
 }
 
-+ (nonnull RTCConfiguration *)RTCConfiguration:(id)json {
-    RTCConfiguration *config = [[RTCConfiguration alloc] init];
++ (nonnull LKRTCConfiguration *)RTCConfiguration:(id)json {
+    LKRTCConfiguration *config = [[LKRTCConfiguration alloc] init];
     config.sdpSemantics = RTCSdpSemanticsUnifiedPlan;
 
     // Required for perfect negotiation.
     config.enableImplicitRollback = YES;
 
     // Enable GCM ciphers.
-    RTCCryptoOptions *cryptoOptions = [[RTCCryptoOptions alloc] initWithSrtpEnableGcmCryptoSuites:YES
+    LKRTCCryptoOptions *cryptoOptions = [[LKRTCCryptoOptions alloc] initWithSrtpEnableGcmCryptoSuites:YES
                                                               srtpEnableAes128Sha1_32CryptoCipher:NO
                                                            srtpEnableEncryptedRtpHeaderExtensions:NO
                                                                      sframeRequireFrameEncryption:NO];
@@ -131,9 +131,9 @@
     }
 
     if (json[@"iceServers"] != nil && [json[@"iceServers"] isKindOfClass:[NSArray class]]) {
-        NSMutableArray<RTCIceServer *> *iceServers = [NSMutableArray new];
+        NSMutableArray<LKRTCIceServer *> *iceServers = [NSMutableArray new];
         for (id server in json[@"iceServers"]) {
-            RTCIceServer *convert = [RCTConvert RTCIceServer:server];
+            LKRTCIceServer *convert = [RCTConvert RTCIceServer:server];
             if (convert != nil) {
                 [iceServers addObject:convert];
             }
@@ -175,12 +175,12 @@
     return config;
 }
 
-+ (RTCDataChannelConfiguration *)RTCDataChannelConfiguration:(id)json {
++ (LKRTCDataChannelConfiguration *)RTCDataChannelConfiguration:(id)json {
     if (!json) {
         return nil;
     }
     if ([json isKindOfClass:[NSDictionary class]]) {
-        RTCDataChannelConfiguration *init = [RTCDataChannelConfiguration new];
+        LKRTCDataChannelConfiguration *init = [LKRTCDataChannelConfiguration new];
 
         if (json[@"id"]) {
             [init setChannelId:[RCTConvert int:json[@"id"]]];

@@ -5,7 +5,7 @@
 #import <React/RCTConvert.h>
 #import <React/RCTEventEmitter.h>
 
-#import <WebRTC/WebRTC.h>
+#import <LiveKitWebRTC/LiveKitWebRTC.h>
 
 static NSString *const kEventPeerConnectionSignalingStateChanged = @"peerConnectionSignalingStateChanged";
 static NSString *const kEventPeerConnectionStateChanged = @"peerConnectionStateChanged";
@@ -26,14 +26,14 @@ static NSString *const kEventPeerConnectionOnTrack = @"peerConnectionOnTrack";
 
 @property(nonatomic, strong) dispatch_queue_t workerQueue;
 
-@property(nonatomic, strong) RTCPeerConnectionFactory *peerConnectionFactory;
-@property(nonatomic, strong) id<RTCVideoDecoderFactory> decoderFactory;
-@property(nonatomic, strong) id<RTCVideoEncoderFactory> encoderFactory;
+@property(nonatomic, strong) LKRTCPeerConnectionFactory *peerConnectionFactory;
+@property(nonatomic, strong) id<LKRTCVideoDecoderFactory> decoderFactory;
+@property(nonatomic, strong) id<LKRTCVideoEncoderFactory> encoderFactory;
 
-@property(nonatomic, strong) NSMutableDictionary<NSNumber *, RTCPeerConnection *> *peerConnections;
-@property(nonatomic, strong) NSMutableDictionary<NSString *, RTCMediaStream *> *localStreams;
-@property(nonatomic, strong) NSMutableDictionary<NSString *, RTCMediaStreamTrack *> *localTracks;
+@property(nonatomic, strong) NSMutableDictionary<NSNumber *, LKRTCPeerConnection *> *peerConnections;
+@property(nonatomic, strong) NSMutableDictionary<NSString *, LKRTCMediaStream *> *localStreams;
+@property(nonatomic, strong) NSMutableDictionary<NSString *, LKRTCMediaStreamTrack *> *localTracks;
 
-- (RTCMediaStream *)streamForReactTag:(NSString *)reactTag;
+- (LKRTCMediaStream *)streamForReactTag:(NSString *)reactTag;
 
 @end

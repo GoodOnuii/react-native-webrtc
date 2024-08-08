@@ -10,8 +10,8 @@ import sys
 
 # Constants
 
-APPLE_FRAMEWORK_NAME = 'WebRTC.framework'
-APPLE_DSYM_NAME = 'WebRTC.dSYM'
+APPLE_FRAMEWORK_NAME = 'LiveKitWebRTC.framework'
+APPLE_DSYM_NAME = 'LiveKitWebRTC.dSYM'
 
 ANDROID_CPU_ABI_MAP = {
     'arm'   : 'armeabi-v7a',
@@ -38,6 +38,7 @@ def build_gn_args(platform_args):
     return "--args='" + ' '.join(GN_COMMON_ARGS + platform_args) + "'"
 
 GN_COMMON_ARGS = [
+    'rtc_objc_prefix="LK"'
     'rtc_libvpx_build_vp9=true',
     'rtc_enable_protobuf=false',
     'rtc_include_tests=false',
@@ -231,11 +232,11 @@ def build(target_dir, platform, debug):
         gn_out_dir = 'out/%s-ios-%s-%s' % (build_type, tenv, arch)
 
         shutil.copytree(os.path.join(gn_out_dir, APPLE_FRAMEWORK_NAME), os.path.join(gn_out_dir, 'fat-' + APPLE_FRAMEWORK_NAME))
-        out_lib_path = os.path.join(gn_out_dir, 'fat-' + APPLE_FRAMEWORK_NAME, 'WebRTC')
+        out_lib_path = os.path.join(gn_out_dir, 'fat-' + APPLE_FRAMEWORK_NAME, 'LiveKitWebRTC')
         slice_paths = []
         for item in simulators:
             tenv, arch = item.split(':')
-            lib_path = os.path.join('out/%s-ios-%s-%s' % (build_type, tenv, arch), APPLE_FRAMEWORK_NAME, 'WebRTC')
+            lib_path = os.path.join('out/%s-ios-%s-%s' % (build_type, tenv, arch), APPLE_FRAMEWORK_NAME, 'LiveKitWebRTC')
             slice_paths.append(lib_path)
         sh('lipo %s -create -output %s' % (' '.join(slice_paths), out_lib_path))
 
@@ -247,11 +248,11 @@ def build(target_dir, platform, debug):
 
         # dSYMs
         shutil.copytree(os.path.join(gn_out_dir, APPLE_DSYM_NAME), os.path.join(gn_out_dir, 'fat-' + APPLE_DSYM_NAME))
-        out_dsym_path = os.path.join(gn_out_dir, 'fat-' + APPLE_DSYM_NAME, 'Contents', 'Resources', 'DWARF', 'WebRTC')
+        out_dsym_path = os.path.join(gn_out_dir, 'fat-' + APPLE_DSYM_NAME, 'Contents', 'Resources', 'DWARF', 'LiveKitWebRTC')
         slice_paths = []
         for item in simulators:
             tenv, arch = item.split(':')
-            dsym_path = os.path.join('out/%s-ios-%s-%s' % (build_type, tenv, arch), APPLE_DSYM_NAME, 'Contents', 'Resources', 'DWARF', 'WebRTC')
+            dsym_path = os.path.join('out/%s-ios-%s-%s' % (build_type, tenv, arch), APPLE_DSYM_NAME, 'Contents', 'Resources', 'DWARF', 'LiveKitWebRTC')
             slice_paths.append(dsym_path)
         sh('lipo %s -create -output %s' % (' '.join(slice_paths), out_dsym_path))
 
@@ -265,7 +266,7 @@ def build(target_dir, platform, debug):
         _IOS_BUILD_ARCHS.append(simulators[0])
 
         # XCFramework
-        xcframework_path = os.path.join(build_dir, 'WebRTC.xcframework')
+        xcframework_path = os.path.join(build_dir, 'LiveKitWebRTC.xcframework')
         xcodebuild_cmd = 'xcodebuild -create-xcframework -output %s' % xcframework_path
         for item in _IOS_BUILD_ARCHS:
             tenv, arch = item.split(':')
@@ -276,7 +277,7 @@ def build(target_dir, platform, debug):
         #    gn_out_dir = 'out/%s-macos-%s' % (build_type, arch)
         #    xcodebuild_cmd += ' -framework %s' % os.path.join(gn_out_dir, APPLE_FRAMEWORK_NAME)
         sh(xcodebuild_cmd)
-        sh('zip -r WebRTC.xcframework.zip WebRTC.xcframework', cwd=build_dir)
+        sh('zip -r LiveKitWebRTC.xcframework.zip LiveKitWebRTC.xcframework', cwd=build_dir)
         rmr(xcframework_path)
     else:
         gn_out_dir = 'out/%s-%s' % (build_type, ANDROID_BUILD_CPUS[0])

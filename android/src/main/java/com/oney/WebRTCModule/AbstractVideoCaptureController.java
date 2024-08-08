@@ -1,6 +1,6 @@
 package com.oney.WebRTCModule;
 
-import org.webrtc.VideoCapturer;
+import livekit.org.webrtc.VideoCapturer;
 
 public abstract class AbstractVideoCaptureController {
     protected int width;

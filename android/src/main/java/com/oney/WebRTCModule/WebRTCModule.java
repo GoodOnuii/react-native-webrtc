@@ -24,9 +24,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoDecoderFactory;
 import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoEncoderFactory;
 
-import org.webrtc.*;
-import org.webrtc.audio.AudioDeviceModule;
-import org.webrtc.audio.JavaAudioDeviceModule;
+import livekit.org.webrtc.*;
+import livekit.org.webrtc.audio.AudioDeviceModule;
+import livekit.org.webrtc.audio.JavaAudioDeviceModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;

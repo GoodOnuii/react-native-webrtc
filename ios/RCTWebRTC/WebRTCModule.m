@@ -27,7 +27,7 @@
     _localStreams = nil;
 
     for (NSNumber *peerConnectionId in _peerConnections) {
-        RTCPeerConnection *peerConnection = _peerConnections[peerConnectionId];
+        LKRTCPeerConnection *peerConnection = _peerConnections[peerConnectionId];
         peerConnection.delegate = nil;
         [peerConnection close];
     }
@@ -40,10 +40,10 @@
     self = [super init];
     if (self) {
         WebRTCModuleOptions *options = [WebRTCModuleOptions sharedInstance];
-        id<RTCAudioDevice> audioDevice = options.audioDevice;
-        id<RTCVideoDecoderFactory> decoderFactory = options.videoDecoderFactory;
-        id<RTCVideoEncoderFactory> encoderFactory = options.videoEncoderFactory;
-        id<RTCAudioProcessingModule> audioProcessingModule = options.audioProcessingModule;
+        id<LKRTCAudioDevice> audioDevice = options.audioDevice;
+        id<LKRTCVideoDecoderFactory> decoderFactory = options.videoDecoderFactory;
+        id<LKRTCVideoEncoderFactory> encoderFactory = options.videoEncoderFactory;
+        id<LKRTCAudioProcessingModule> audioProcessingModule = options.audioProcessingModule;
         NSDictionary *fieldTrials = options.fieldTrials;
         RTCLoggingSeverity loggingSeverity = options.loggingSeverity;
 
@@ -59,10 +59,10 @@
         RTCSetMinDebugLogLevel(loggingSeverity);
 
         if (encoderFactory == nil) {
-            encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+            encoderFactory = [[LKRTCDefaultVideoEncoderFactory alloc] init];
         }
         if (decoderFactory == nil) {
-            decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
+            decoderFactory = [[LKRTCDefaultVideoDecoderFactory alloc] init];
         }
         _encoderFactory = encoderFactory;
         _decoderFactory = decoderFactory;
@@ -75,13 +75,13 @@
                 NSLog(@"Both audioProcessingModule and audioDevice are provided, but only one can be used. Ignoring audioDevice.");
             }
             RCTLogInfo(@"Using audio processing module: %@", NSStringFromClass([audioProcessingModule class]));
-            _peerConnectionFactory = [[RTCPeerConnectionFactory alloc] initWithBypassVoiceProcessing:NO
+            _peerConnectionFactory = [[LKRTCPeerConnectionFactory alloc] initWithBypassVoiceProcessing:NO
                                                                                       encoderFactory:encoderFactory
                                                                                       decoderFactory:decoderFactory
                                                                                audioProcessingModule:audioProcessingModule];
         } else {
             RCTLogInfo(@"Using audio device: %@", NSStringFromClass([audioDevice class]));
-            _peerConnectionFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
+            _peerConnectionFactory = [[LKRTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
                                                                                decoderFactory:decoderFactory
                                                                                   audioDevice:audioDevice];
         }
@@ -98,11 +98,11 @@
     return self;
 }
 
-- (RTCMediaStream *)streamForReactTag:(NSString *)reactTag {
-    RTCMediaStream *stream = _localStreams[reactTag];
+- (LKRTCMediaStream *)streamForReactTag:(NSString *)reactTag {
+    LKRTCMediaStream *stream = _localStreams[reactTag];
     if (!stream) {
         for (NSNumber *peerConnectionId in _peerConnections) {
-            RTCPeerConnection *peerConnection = _peerConnections[peerConnectionId];
+            LKRTCPeerConnection *peerConnection = _peerConnections[peerConnectionId];
             stream = peerConnection.remoteStreams[reactTag];
             if (stream) {
                 break;

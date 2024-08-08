@@ -3,8 +3,8 @@
 #include <mach/mach_time.h>
 
 #import <ReplayKit/ReplayKit.h>
-#import <WebRTC/RTCCVPixelBuffer.h>
-#import <WebRTC/RTCVideoFrameBuffer.h>
+#import <LiveKitWebRTC/RTCCVPixelBuffer.h>
+#import <LiveKitWebRTC/RTCVideoFrameBuffer.h>
 
 #import "ScreenCapturer.h"
 #import "SocketConnection.h"
@@ -136,7 +136,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
     int64_t _startTimeStampNs;
 }
 
-- (instancetype)initWithDelegate:(__weak id<RTCVideoCapturerDelegate>)delegate {
+- (instancetype)initWithDelegate:(__weak id<LKRTCVideoCapturerDelegate>)delegate {
     self = [super initWithDelegate:delegate];
     if (self) {
         mach_timebase_info(&_timebaseInfo);
@@ -207,7 +207,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
         _startTimeStampNs = currentTimeStampNs;
     }
 
-    RTCCVPixelBuffer *rtcPixelBuffer = [[RTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
+    LKRTCCVPixelBuffer *rtcPixelBuffer = [[LKRTCCVPixelBuffer alloc] initWithPixelBuffer:pixelBuffer];
     int64_t frameTimeStampNs = currentTimeStampNs - _startTimeStampNs;
 
     RTCVideoRotation rotation;
@@ -226,7 +226,7 @@ const NSUInteger kMaxReadLength = 10 * 1024;
             break;
     }
 
-    RTCVideoFrame *videoFrame = [[RTCVideoFrame alloc] initWithBuffer:rtcPixelBuffer
+    LKRTCVideoFrame *videoFrame = [[LKRTCVideoFrame alloc] initWithBuffer:rtcPixelBuffer
                                                              rotation:rotation
                                                           timeStampNs:frameTimeStampNs];
 
